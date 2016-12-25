@@ -1,4 +1,4 @@
-#include <mysql/mysql.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -11,6 +11,8 @@
 #include <time.h>
 #include <ctype.h>
 #include <arpa/inet.h>
+
+#include <mysql/mysql.h>
 
 #include "cfgana.h"
 

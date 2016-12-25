@@ -29,7 +29,7 @@ sources := $(wildcard *.c) + $(wildcard *.cpp)
 all: $(binaries)
 
 cfgana:  main.o util.o db.o
-	$(CC) -Wall $(LDFLAGS) -o $@ $?
+	$(CC) -Wall  -o $@ $? $(LDFLAGS)
 
 .c:
 	$(CC) $(CFLAGS) $(CPPFLAGS) -fPIC -o $@ $<
