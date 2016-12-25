@@ -17,10 +17,10 @@ DEFS =  -DSIGTYPE=int -DDIRENT -DSTRSTR_MISSING \
 
 WARNING = -Wall
 CDEBUG = -g
-LIBS = -L/usr/lib -L /lib
+LIBS = -L/usr/lib -L/usr/lib/x86_64-linux-gnu -L /lib
 CFLAGS =   $(DEFS) $(LIBS) $(CDEBUG) -I. -I$(srcdir) -fPIC
 CPPFLAGS = $(CDEBUG) -I.  $(WARNING) 
-LDFLAGS = -lpthread -lmysqlclient 
+LDFLAGS = -lpthread -lmysqlclient -lz -lm -lrt -ldl
 
 binaries := cfgana
 objects := $(patsubst %.c,%.o,$(wildcard *.c))
