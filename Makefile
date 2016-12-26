@@ -24,11 +24,11 @@ LDFLAGS = -lpthread -lmysqlclient -lz -lm -lrt -ldl
 
 binaries := cfgana
 objects := $(patsubst %.c,%.o,$(wildcard *.c))
-sources := $(wildcard *.c) + $(wildcard *.cpp)
+sources := $(wildcard *.c)
 
 all: $(binaries)
 
-cfgana:  main.o util.o db.o
+cfgana: $(objects)
 	$(CC) -Wall  -o $@ $? $(LDFLAGS)
 
 .c:

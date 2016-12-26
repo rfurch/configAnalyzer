@@ -45,7 +45,6 @@ printf ("============================================================\n\n");
 fflush(stdout);
 }
 
-
 //----------------------------------------------------------------------
 
 int processIP(intDATA *d, char *dline)
@@ -76,32 +75,11 @@ return(0);
 
 //----------------------------------------------------------------------
 
-int processLine(char *org, char *dst, char *pattern)
-{
-int 	i=0;
-char 	*p=NULL;
 
-for (i=0 ; i<strlen(org) ; i++)
-  {	
-  if (org[i] == 0x0D || org[i] == 0x0A)
-	{
-	org[i] = 0;
-	break;
-	}
-  }
-  
-if ( (p = strstr(org, pattern)) != NULL )
-  {
-  strcpy(dst, p + strlen(pattern));
-  return(1);
-  }
-      		
-return(0);
-}
 
 //----------------------------------------------------------------------
 
-int processFile()
+int processFileOld()
 {
 FILE 		*f=NULL;
 char 		dline[3000];	
@@ -160,10 +138,10 @@ if ( (f = fopen(_fname, "r")) != NULL )
 		  {
 		  if (strlen(dline) < 5)			// end of interface block
 			{
-			if (!int01.shutdown && strlen(int01.vrf) < 2)  // global interfaces, no shutdown
+			//if (!int01.shutdown && strlen(int01.vrf) < 2)  // global interfaces, no shutdown
 				{
 				interfacePrint(&int01);
-				interfaceToDB(&int01, devicename);
+				//interfaceToDB(&int01, devicename);
 				}
 			interfaceFree(&int01);
 
@@ -193,6 +171,152 @@ return(1);
 
 }
 
+//----------------------------------------------------------------------
+
+int getHostNameFromFileName()
+{
+char 		devicename[400];
+int 		i=0;
+
+strcpy(devicename, _fname);
+// get hostname from filename, for DB matching conditions
+for (i=strlen(devicename)-1 ; i>0 ; i--)	// remove "extension"  (characters after dot)
+  if (devicename[i] == '.')
+    {
+	devicename[i] = 0;
+	break;
+	}		
+
+for (i=strlen(devicename)-1 ; i>0 ; i--) // remove path
+  if (devicename[i] == '/')
+    {
+	memmove(devicename, &devicename[i+1], strlen(devicename) - i + 1);
+	devicename[strlen(devicename) - i + 1] = 0;	
+	break;
+	}		
+
+if (_verbose > 2)
+	printf("\n Device NAME: |%s| ", devicename);
+               
+return(1);
+}           
+
+//----------------------------------------------------------------------
+
+int parseInterface(ciscoData *d, char *line) 
+{
+    
+if (_verbose > 1)
+		printf("\n parseInterface: line: %s", line );
+return(1);
+}    
+
+//----------------------------------------------------------------------
+
+int parseEventManager(ciscoData *d, char *line) 
+{
+    
+if (_verbose > 1)
+		printf("\n parseEventManager: line: %s", line );
+return(1);
+}    
+
+//----------------------------------------------------------------------
+
+int parseIPSLA(ciscoData *d, char *line) 
+{
+    
+if (_verbose > 1)
+		printf("\n parseIPSLA: line: %s", line );
+return(1);
+}    
+
+//----------------------------------------------------------------------
+
+int parsePolicyMap(ciscoData *d, char *line) 
+{
+    
+if (_verbose > 1)
+		printf("\n parsePolicyMap: line: %s", line );
+return(1);
+}    
+      
+//----------------------------------------------------------------------
+
+int parseClassMap(ciscoData *d, char *line) 
+{
+    
+if (_verbose > 1)
+		printf("\n parseClassMap: line: %s", line );
+return(1);
+}    
+
+//----------------------------------------------------------------------
+
+int parseTrack(ciscoData *d, char *line) 
+{
+    
+if (_verbose > 1)
+		printf("\n parseTrack: line: %s", line );
+return(1);
+}    
+ 
+//----------------------------------------------------------------------
+
+
+int processFile()
+{
+FILE 		*f=NULL;
+char 		dline[3000];	
+ciscoData 	d;
+int 		(*parseFunction)(ciscoData *, char *) = NULL;
+
+
+ciscoInit(&d);
+
+// parse filename to get hostname (not safe but better than nothing!)
+getHostNameFromFileName();
+
+
+if ( (f = fopen(_fname, "r")) != NULL )
+  {
+  while (fgets(dline, 2998, f))
+	{
+	if (_verbose > 3)
+	  printf("\n line-- |%s|", dline);
+    
+    if (dline[0] != ' ')
+   		parseFunction = NULL;
+
+	if (strncmp(dline, "interface ", strlen("interface ")) == 0)
+		parseFunction = &parseInterface;
+	else if (strncmp(dline, "event manager applet ", strlen("event manager applet ")) == 0)
+		parseFunction = &parseEventManager;
+	else if (strncmp(dline, "ip sla ", strlen("ip sla ")) == 0)
+		parseFunction = &parseIPSLA;
+	else if (strncmp(dline, "policy-map ", strlen("policy-map ")) == 0)
+		parseFunction = &parsePolicyMap;
+	else if (strncmp(dline, "class-map ", strlen("class-map ")) == 0)
+		parseFunction = &parseClassMap;
+	else if (strncmp(dline, "track ", strlen("track ")) == 0)
+		parseFunction = &parseTrack;
+	else if (strncmp(dline, "ip vrf ", strlen("ip vrf ")) == 0)
+		parseFunction = &parseVRF;
+
+	// real line parsing
+	if (parseFunction)
+		parseFunction(&d, dline);
+
+    }
+  fclose(f);
+  }  // fopen
+  
+  
+VRFPrint(&d);
+  
+return(1);
+
+}
                                                                                  
 //----------------------------------------------------------------------
 

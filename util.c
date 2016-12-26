@@ -79,4 +79,26 @@ return(1);
 }
 
 //----------------------------------------------------------------------
+int processLine(char *org, char *dst, char *pattern)
+{
+int 	i=0;
+char 	*p=NULL;
+
+for (i=0 ; i<strlen(org) ; i++)
+  {	
+  if (org[i] == 0x0D || org[i] == 0x0A)
+	{
+	org[i] = 0;
+	break;
+	}
+  }
+  
+if ( (p = strstr(org, pattern)) != NULL )
+  {
+  strcpy(dst, p + strlen(pattern));
+  return(1);
+  }
+      		
+return(0);
+}
 //----------------------------------------------------------------------
