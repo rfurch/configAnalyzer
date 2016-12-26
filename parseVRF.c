@@ -48,11 +48,19 @@ return(1);
 }
 //----------------------------------------------------------------------
 
-int parseVRF(ciscoData *d, char *line) 
+int VRFParse(ciscoData *d, char *line) 
 {
 
-if (_verbose > 1)
-	printf("\n parseVRF: line: %s", line );
+if (_verbose > 2)
+	printf("\n VRFParse: line: %s", line );
+    
+
+// omit the lines:  "ip vrf forwarding"  and  "ip vrf ip" if they exist
+
+if (strstr(line, "ip vrf forwarding"))
+	return(1);
+if (strstr(line, "ip vrf ip"))
+	return(1);
     
 if (strncmp(line, "ip vrf ", strlen("ip vrf ")) == 0)
 	{

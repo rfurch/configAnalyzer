@@ -26,7 +26,7 @@ extern  int     _verbose;
 //-------------------------------------------------------------------
 //-------------------------------------------------------------------
 
-int interfaceToDB(intDATA *d, char *hostname)
+int interfaceToDB(IntDATA *d, char *hostname)
 {
 MYSQL       *conn;
 //MYSQL_RES   *res;

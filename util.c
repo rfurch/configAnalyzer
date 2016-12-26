@@ -25,60 +25,6 @@ extern int  		_verbose;
 
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
-
-
-int interfaceInit(intDATA *d)
-{
-memset(d, 0 , sizeof(intDATA));
-return(1);
-}
-
-//----------------------------------------------------------------------
-
-int interfaceAddIP(intDATA *d, char *ip, char *mask, int secondary)
-{
-
-if ( (d->ip_data = (intIP *) realloc(d->ip_data, (d->ip_qtty+1) * sizeof(intIP))) == NULL )
-    {
-    printf("\n\n addIpToInterface: ALLOCATION ERROR!!!");
-    exit(0);
-    }
-
-strcpy(d->ip_data[d->ip_qtty].ip, ip);
-strcpy(d->ip_data[d->ip_qtty].mask, mask);
-d->ip_data[d->ip_qtty].secondary = secondary;
-d->ip_qtty++;	
-
-return(1);
-}
-
-//----------------------------------------------------------------------
-
-int interfacePrint(intDATA *d)
-{
-int i=0;
-
-printf("\nInterface: |%s| vrf: |%s| desc: |%s|", d->name, d->vrf, d->description);
-for (i=0 ; i<d->ip_qtty ; i++)
-	printf("\n   IP: |%s/%s| (secondary: %i)", d->ip_data[i].ip, d->ip_data[i].mask, d->ip_data[i].secondary);
-
-printf("\n");
-
-return(1);
-}
-
-//----------------------------------------------------------------------
-
-int interfaceFree(intDATA *d)
-{
-if (d->ip_data)
-	free(d->ip_data);
-memset(d, 0 , sizeof(intDATA));
-	
-return(1);
-}
-
-//----------------------------------------------------------------------
 int processLine(char *org, char *dst, char *pattern)
 {
 int 	i=0;
@@ -101,4 +47,40 @@ if ( (p = strstr(org, pattern)) != NULL )
       		
 return(0);
 }
+
+
+//----------------------------------------------------------------------
+//----------------------------------------------------------------------
+
+int getHostNameFromFileName()
+{
+char 		devicename[400];
+int 		i=0;
+
+strcpy(devicename, _fname);
+// get hostname from filename, for DB matching conditions
+for (i=strlen(devicename)-1 ; i>0 ; i--)	// remove "extension"  (characters after dot)
+  if (devicename[i] == '.')
+    {
+	devicename[i] = 0;
+	break;
+	}		
+
+for (i=strlen(devicename)-1 ; i>0 ; i--) // remove path
+  if (devicename[i] == '/')
+    {
+	memmove(devicename, &devicename[i+1], strlen(devicename) - i + 1);
+	devicename[strlen(devicename) - i + 1] = 0;	
+	break;
+	}		
+
+if (_verbose > 2)
+	printf("\n Device NAME: |%s| ", devicename);
+               
+return(1);
+}
+  
+
+
+//----------------------------------------------------------------------
 //----------------------------------------------------------------------
