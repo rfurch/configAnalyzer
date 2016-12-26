@@ -19,10 +19,12 @@ typedef struct IntDATA
   char 			name[NAME_LENGTH];
   char 			description[NAME_LENGTH];
   char 			vrf[NAME_LENGTH];  	
-
+  
+  short 		mtu;
   short 		switchport;				// interface switchport mode
-  int 			shutdown;				// interface is in shutdown state (ADMIN)	
-  int 			ip_qtty;	
+  short 		shutdown;				// interface is in shutdown state (ADMIN)	
+  short 		mpls;					// interface forwarding MPLS packets
+  short			ip_qtty;	
   intIP			*ip_data;
   }IntDATA;
    

@@ -1,3 +1,8 @@
+//
+//  Cisco code running config parsing.   Generic functions (high level)
+//
+
+
 #include <stdio.h>
 #include <ctype.h>
 #include <arpa/inet.h>

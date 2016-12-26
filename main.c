@@ -1,3 +1,12 @@
+
+//
+//  Cisco running config parsing main code
+//  this block of code calls the required rutines 
+//  for parsing. 
+//  It receives the running-config filename to analyze 
+//
+
+
 #include <stdio.h>
 #include <ctype.h>
 #include <arpa/inet.h>
@@ -19,13 +28,6 @@
 
 #include "cfgana.h"
 
-#define		CISCO_SEARCH_FOR_HOSTNAME			50
-
-#define		CISCO_SEARCH_FOR_INTERFACE			100
-#define		CISCO_SEARCH_FOR_INTERFACE_IP		101
-
-#define		CISCO_SEARCH_FOR_END_OF_INTERFACE	500
-#define		CISCO_SEARCH_FOR_END_OF_FILE		900
 
 int  		_verbose=0;
 char 		_fname[2000];
@@ -104,7 +106,7 @@ int parseArgs(int argc, char *argv[])
 
 int 			c=0; 
 
-while ( ( c= getopt(argc,argv,"p:t:i:I:f:n:s:vp:")) != -1 )
+while ( ( c= getopt(argc,argv,"f:v")) != -1 )
   {
   switch(c)
 	{
@@ -112,27 +114,9 @@ while ( ( c= getopt(argc,argv,"p:t:i:I:f:n:s:vp:")) != -1 )
 	  _verbose++; 
 	break;
   
-	case 't':
-	break;
-
-	case 'p':
-	break;
-
-	case 'i':
-	break;
-
-	case 's':
-	break;
-
-    case 'I':
-	break;
-
 	case 'f':
 	  if (optarg)
 		strcpy(_fname, optarg);
-	break;
-
-	case 'n':
 	break;
 
 	case '?': 
