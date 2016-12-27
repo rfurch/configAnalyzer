@@ -36,7 +36,12 @@ typedef struct IntDATA
   char 			rd[NAME_LENGTH];  	
   }VRFDATA;
    
-    
+ typedef struct SLADATA
+  {
+  char 			name[NAME_LENGTH];
+  char 			vrf[NAME_LENGTH];  	
+  }SLADATA;
+       
 typedef struct ciscoData
   {
   char			hostname[NAME_LENGTH];
@@ -46,6 +51,9 @@ typedef struct ciscoData
   
   IntDATA		*interfaces;	// idem for interfaces
   int 			intQtty;
+
+  SLADATA		*slas;			// idem for SLA
+  int 			slaQtty;
   }ciscoData;
 
 
@@ -82,5 +90,10 @@ int INTPrint(ciscoData *c);
 int INTFree(IntDATA *d);
 int INTProcessIP(IntDATA *d, char *dline);
 int INTParse(ciscoData *d, char *line);
+
+// parseSLA.c
+int SLAParse(ciscoData *d, char *line);
+int SLAPrint(ciscoData *d);
+
 
 

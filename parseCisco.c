@@ -82,6 +82,9 @@ if ( (f = fopen(_fname, "r")) != NULL )
 		parseFunction = &HostnameParse;
 	else if (strncmp(dline, "interface ", strlen("interface ")) == 0)
 		parseFunction = &INTParse;
+	else if (strncmp(dline, "ip sla ", strlen("ip sla ")) == 0)
+		parseFunction = &SLAParse; 
+
 /*	else if (strncmp(dline, "event manager applet ", strlen("event manager applet ")) == 0)
 		parseFunction = &parseEventManager;
 	else if (strncmp(dline, "ip sla ", strlen("ip sla ")) == 0)
@@ -106,6 +109,7 @@ if ( (f = fopen(_fname, "r")) != NULL )
   
 VRFPrint(&d);
 INTPrint(&d);
+SLAPrint(&d); 
   
 return(1);
 

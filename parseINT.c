@@ -165,12 +165,12 @@ else if (strncmp(line, " mtu ", strlen(" mtu ")) == 0)
 	if (d->intQtty > 0)
 		d->interfaces[d->intQtty-1].mtu = atol(aux);
 	}	
-else if ( strstr(line, " switchport") == 0 && strlen(line) < 15 )
+else if ( strstr(line, " switchport") && strlen(line) < 15 )
 	{
 	if (d->intQtty > 0)
 		d->interfaces[d->intQtty-1].switchport = 1;
 	}	
-else if ( strstr(line, " mpls ip") == 0 )
+else if ( strstr(line, " mpls ip") )
 	{
 	if (d->intQtty > 0)
 		d->interfaces[d->intQtty-1].mpls = 1;
